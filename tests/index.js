@@ -9,6 +9,8 @@ let mongoosePaginate = require('../dist/index');
 
 let MONGO_URI = 'mongodb://localhost/mongoose_paginate_test?authsource=admin';
 
+mongoose.set('strictQuery', 'throw');
+
 let AuthorSchema = new mongoose.Schema({
   name: String,
 });
@@ -56,12 +58,9 @@ describe('mongoose-paginate', function () {
       MONGO_URI,
       {
         auth: {
-          user: 'root',
+          username: 'root',
           password: 'example',
         },
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
       },
       done
     );

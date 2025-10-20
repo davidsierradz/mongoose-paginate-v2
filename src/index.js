@@ -46,6 +46,7 @@ const defaultOptions = {
   useEstimatedCount: false,
   forceCountFn: false,
   customFind: 'find',
+  customCount: 'countDocuments',
 };
 
 function paginate(query, options, callback) {
@@ -70,6 +71,7 @@ function paginate(query, options, callback) {
     useEstimatedCount,
     forceCountFn,
     customFind,
+    customCount,
   } = options;
 
   const customLabels = {
@@ -123,7 +125,11 @@ function paginate(query, options, callback) {
     if (useEstimatedCount === true) {
       countPromise = this.estimatedDocumentCount().exec();
     } else {
-      countPromise = this[customFind](query).exec();
+      if (query['$where']) {
+        countPromise = this.count(query).exec();
+      } else {
+        countPromise = this[customCount](query).exec();
+      }
     }
   }
 
